@@ -165,7 +165,7 @@ mkdir -p $HOMEDIR/$USERNAME
 chmod 600 $FTPCONF/password.db
 chmod 750 $HOMEDIR/$USERNAME
 
-groupadd custom_ftpuser
+getent group custom_ftpuser || groupadd custom_ftpuser
 useradd -g custom_ftpuser -s /sbin/nologin $USERNAME
 echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
 
