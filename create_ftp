@@ -44,7 +44,7 @@ function checkNewUser_Availability () {
 
     else
         USERNAMEOK=NO
-        echo 'avai'
+        echo 'avai1'
     fi
 }
 
