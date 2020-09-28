@@ -89,7 +89,7 @@ echo '-------------------------------------------------------------------'
 echo " vsftpd -> Virtual Users -> Add Virtual User"
 echo '-------------------------------------------------------------------'
 
-yum -y install epel-release libdb4-utils
+yum -y install epel-release libdb4-utils vsftpd
 
 # Check dependencies
 PACKISMISSING=""
