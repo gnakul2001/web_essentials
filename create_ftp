@@ -42,7 +42,8 @@ function checkNewUser_Availability () {
             echo 'avai'
         fi
     else
-        mkdir -p $FTPCONF/denied_users
+        mkdir -p $FTPCONF
+        touch $FTPCONF/denied_users
         checkNewUser_Availability
     fi
 }
