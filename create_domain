@@ -65,12 +65,12 @@ if [ "$action" == 'create' ]
 			### give permission to root dir
 			chmod 755 $rootDir
 			### write test file in the new domain dir
-			if ! echo $"Hello Welcome to http://$domain"  > $rootDir/index.php
+			if ! echo $"Hello Welcome to http://$domain"  > $rootDir/index.html
 			then
-				echo $"ERROR: Not able to write in file $rootDir/index.php. Please check permissions"
+				echo $"ERROR: Not able to write in file $rootDir/index.html. Please check permissions"
 				exit;
 			else
-				echo $"Added content to $rootDir/index.php"
+				echo $"Added content to $rootDir/index.html"
 			fi
 		fi
 		
