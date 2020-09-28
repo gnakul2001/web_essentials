@@ -37,11 +37,10 @@ function checkNewUser_Availability () {
     if [ -f $FTPCONF/denied_users ];then
         if [ ! `grep -w $USERNAME $FTPCONF/denied_users` ];then
             USERNAMEOK=YES
-    else
-        USERNAMEOK=NO
-        echo 'avai'
+        else
+            USERNAMEOK=NO
+            echo 'avai'
         fi
-
     else
         USERNAMEOK=NO
         echo 'avai1'
