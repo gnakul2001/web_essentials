@@ -164,7 +164,12 @@ mkdir -p $HOMEDIR/$USERNAME
 # Set Permissions
 chmod 600 $FTPCONF/password.db
 chmod 750 $HOMEDIR/$USERNAME
-chown -R vsftpd:vsftpd $HOMEDIR
+
+groupadd custom_ftpuser
+useradd -g custom_ftpuser -d $HOMEDIR/$USERNAME -s /sbin/nologin $USERNAME
+echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
+
+chown -R custom_ftpuser:$USERNAME $HOMEDIR
 
 
 # Restart vsftpd after user addition.
