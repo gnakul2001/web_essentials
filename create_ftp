@@ -124,14 +124,14 @@ echo " Home directory location         : ${HOMEDIR}/$USERNAME "
 echo " Home directory permissions      : $USERNAME.$USERNAME | 750 | public_content_rw_t"
 echo " Login Shell                     : $SHELL "
 
+mkdir -p /etc/vsftpd/user_conf/
+touch /etc/vsftpd/user_conf/$USERNAME
 #
 # Create specific user configuration
 #
 echo "dirlist_enable=YES
 download_enable=YES
 local_root=/var/www/$USER
-mkdir -p /etc/vsftpd/user_conf/
-touch /etc/vsftpd/user_conf/$USERNAME
 write_enable=YES" > /etc/vsftpd/user_conf/$USERNAME
 
 #
@@ -169,5 +169,5 @@ chown -R vsftpd:vsftpd $HOMEDIR
 
 # Restart vsftpd after user addition.
 echo '-------------------------------------------------------------------'
-/sbin/service vsftpd reload
+systemctl restart vsftpd
 echo '-------------------------------------------------------------------'
