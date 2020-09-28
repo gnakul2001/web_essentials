@@ -46,6 +46,7 @@ fi
 rootDir=$userDir$rootDir
 
 yum install httpd -y
+mkdir -p $userDir
 mkdir -p $sitesEnable
 mkdir -p $sitesAvailable
 
