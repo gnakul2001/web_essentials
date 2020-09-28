@@ -10,8 +10,10 @@ owner=$(who am i | awk '{print $1}')
 email='webmaster@localhost'
 sitesEnable='/etc/httpd/sites-enabled/'
 sitesAvailable='/etc/httpd/sites-available/'
-userDir='/var/www/'
+userDir='/var/www/websites'
 sitesAvailabledomain=$sitesAvailable$domain.conf
+sitesEnableDefault=$sitesEnable/000-default.conf
+confFile='/etc/httpd/conf/httpd.conf'
 
 ### don't modify from here unless you know what you are doing ####
 
@@ -71,11 +73,13 @@ if [ "$action" == 'create' ]
 			fi
 		fi
 		
-		if [ ! -f $sitesEnable/000-default.conf ]; then
-    		if ! echo "
-			<VirtualHost *:80>
-				DocumentRoot /var/www/html
-			</VirtualHost>" > $sitesAvailabledomain
+		grep -qxF 'IncludeOptional sites-enabled/*.conf' $confFile || echo 'IncludeOptional sites-enabled/*.conf' >> $confFile
+		
+		if [ ! -f $sitesEnableDefault ]; then
+			if ! echo "
+				<VirtualHost *:80>
+					DocumentRoot /var/www/html
+				</VirtualHost>" > $sitesEnableDefault
 			then
 				echo -e $"There is an ERROR creating default conf file"
 				exit;
