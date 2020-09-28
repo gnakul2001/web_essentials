@@ -1,0 +1,169 @@
+#!/bin/bash
+
+#------------------------------------------------------------------------------------
+# Initialize some variables
+#------------------------------------------------------------------------------------
+SHELL=/sbin/nologin
+FTPCONF=/etc/vsftpd
+HOMEDIR=/var/www
+
+
+if [ -f $FTPCONF/password ];then
+    ACCOUNTDB_TOTALLINES=`grep '.' -c $FTPCONF/password`
+else
+    ACCOUNTDB_TOTALLINES=0
+fi
+
+function checkNewUser_Existence () {
+    C=1;
+
+    if [ "$ACCOUNTDB_TOTALLINES" != "0" ];then
+        while [ $C -lt $ACCOUNTDB_TOTALLINES ]; do
+            VALIDUSER=`sed -n -e "$C p" $FTPCONF/password`
+            if [ "$USERNAME" == "$VALIDUSER" ];then
+                USERNAMEOK=NO
+                echo 'existence'
+                break;
+            else
+                USERNAMEOK=YES
+           fi
+           let C=$C+2;
+        done
+    fi
+}
+
+function checkNewUser_Availability () {
+
+    if [ -f $FTPCONF/denied_users ];then
+        if [ ! `grep -w $USERNAME $FTPCONF/denied_users` ];then
+            USERNAMEOK=YES
+    else
+        USERNAMEOK=NO
+        echo 'avai'
+        fi
+
+    else
+        USERNAMEOK=NO
+        echo 'avai'
+    fi
+}
+
+function checkNewUser_Homedir () {
+
+    # Verify User's Home Directory.
+    if [ -d $HOMEDIR ];then
+        for i in `ls $HOMEDIR/`; do
+           VALIDUSER=$i
+           if [ "$USERNAME" == "$VALIDUSER" ];then
+               USERNAMEOK=NO
+               echo 'home'
+           break;
+       else
+           USENAMEOK=YES
+           fi
+        done
+    fi
+}
+
+function getUsername () {
+
+    printf " Enter Username (lowercase)      : "
+    read USERNAME
+
+    checkNewUser_Existence;
+    checkNewUser_Availability;
+    checkNewUser_Homedir;
+
+    if [ "$USERNAMEOK" == "NO" ];then
+        echo "  --> Invalid ftp virtual user. Try another username."
+        getUsername;
+    fi
+
+}
+
+#------------------------------------------------------------------------------------
+# Add some presentation :)
+#------------------------------------------------------------------------------------
+clear;
+echo '-------------------------------------------------------------------'
+echo " vsftpd -> Virtual Users -> Add Virtual User"
+echo '-------------------------------------------------------------------'
+
+# Check dependencies
+PACKISMISSING=""
+PACKDEPENDENCIES="vsftpd libdb4-utils"
+for i in `echo $PACKDEPENDENCIES`; do
+    /bin/rpm -q $i > /dev/null
+    if [ "$?" != "0" ];then
+        PACKISMISSING="$PACKISMISSING $i"
+    fi
+done
+if [ "$PACKISMISSING" != "" ];then
+    echo " ATTENTION: The following package(s) are needed by this script:"
+    for i in `echo $PACKISMISSING`; do
+        echo "             - $i"
+    done
+    echo '-------------------------------------------------------------------'
+    exit;
+fi
+
+
+#
+# Get user information
+#
+getUsername;
+printf " Enter Password (case sensitive) : "
+read PASSWORD
+printf " Enter Comment(user's full name) : "
+read FULLNAME
+printf " Account disabled ? (y/N)        : "
+read USERSTATUS
+echo " Home directory location         : ${HOMEDIR}/$USERNAME "
+echo " Home directory permissions      : $USERNAME.$USERNAME | 750 | public_content_rw_t"
+echo " Login Shell                     : $SHELL "
+
+#
+# Create specific user configuration
+#
+echo "dirlist_enable=YES
+download_enable=YES
+local_root=/var/www/$USER
+write_enable=YES" > /etc/vsftpd/user_conf/$USERNAME
+
+#
+# Update denied_users file
+#
+if [ "$USERSTATUS" == "y" ];then
+    echo $USERNAME >> $FTPCONF/denied_users
+else
+    sed -i -r -e "/^$USERNAME$/ d" $FTPCONF/denied_users
+fi
+
+#Create user
+echo $USERNAME | tee /etc/vsftpd/password{,-nocrypt} > /dev/null
+
+#Update password.db file
+mypass=$PASSWORD
+echo $mypass >> /etc/vsftpd/password-nocrypt
+echo $(openssl passwd -crypt $mypass) >> /etc/vsftpd/password
+db_load -T -t hash -f $FTPCONF/password $FTPCONF/password.db
+
+# Create ftp virtual user $HOMEDIR
+if [ ! -d $HOMEDIR  ];then
+    mkdir $HOMEDIR
+fi
+
+
+# Create home directory
+mkdir -p $HOMEDIR/$USERNAME
+
+# Set Permissions
+chmod 600 $FTPCONF/password.db
+chmod 750 $HOMEDIR/$USERNAME
+chown -R vsftpd:vsftpd $HOMEDIR
+
+
+# Restart vsftpd after user addition.
+echo '-------------------------------------------------------------------'
+/sbin/service vsftpd reload
+echo '-------------------------------------------------------------------'
