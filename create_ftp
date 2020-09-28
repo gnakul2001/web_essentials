@@ -130,6 +130,8 @@ echo " Login Shell                     : $SHELL "
 echo "dirlist_enable=YES
 download_enable=YES
 local_root=/var/www/$USER
+mkdir -p /etc/vsftpd/user_conf/
+touch /etc/vsftpd/user_conf/$USERNAME
 write_enable=YES" > /etc/vsftpd/user_conf/$USERNAME
 
 #
