@@ -42,8 +42,8 @@ function checkNewUser_Availability () {
             echo 'avai'
         fi
     else
-        USERNAMEOK=NO
-        echo 'avai1'
+        mkdir -p $FTPCONF/denied_users
+        checkNewUser_Availability
     fi
 }
 
@@ -87,6 +87,8 @@ clear;
 echo '-------------------------------------------------------------------'
 echo " vsftpd -> Virtual Users -> Add Virtual User"
 echo '-------------------------------------------------------------------'
+
+yum -y install epel-release libdb4-utils
 
 # Check dependencies
 PACKISMISSING=""
