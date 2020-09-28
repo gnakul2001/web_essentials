@@ -44,11 +44,11 @@ fi
 rootDir=$userDir$rootDir
 
 yum install httpd -y
+mkdir -p $sitesEnable
+mkdir -p $sitesAvailable
 
 if [ "$action" == 'create' ]
 	then
-		mkdir -p $sitesEnable
-		mkdir -p $sitesAvailable
 		### check if domain already exists
 		if [ -e $sitesAvailabledomain ]; then
 			echo -e $"This domain already exists.\nPlease Try Another one"
@@ -62,12 +62,23 @@ if [ "$action" == 'create' ]
 			### give permission to root dir
 			chmod 755 $rootDir
 			### write test file in the new domain dir
-			if ! echo "<?php echo phpinfo(); ?>" > $rootDir/phpinfo.php
+			if ! echo $"Hello Welcome to http://$domain"  > $rootDir/index.php
 			then
-				echo $"ERROR: Not able to write in file $rootDir/phpinfo.php. Please check permissions"
+				echo $"ERROR: Not able to write in file $rootDir/index.php. Please check permissions"
 				exit;
 			else
-				echo $"Added content to $rootDir/phpinfo.php"
+				echo $"Added content to $rootDir/index.php"
+			fi
+		fi
+		
+		if [ ! -f $sitesEnable/000-default.conf ]; then
+    		if ! echo "
+			<VirtualHost *:80>
+				DocumentRoot /var/www/html
+			</VirtualHost>" > $sitesAvailabledomain
+			then
+				echo -e $"There is an ERROR creating default conf file"
+				exit;
 			fi
 		fi
 
@@ -116,7 +127,7 @@ if [ "$action" == 'create' ]
 		cp $sitesAvailabledomain $sitesEnable/$domain.conf
 
 		### restart Apache
-        systemctl restart httpd
+        	systemctl restart httpd
 
 		### show the finished message
 		echo -e $"Complete! \nYou now have a new Virtual Host \nYour new host is: http://$domain \nAnd its located at $rootDir"
