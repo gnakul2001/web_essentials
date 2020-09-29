@@ -1,0 +1,27 @@
+#!/bin/bash
+
+domain=$1
+ftp_user=$2
+password=$3
+base_dir=$3
+if [ "$domain" == "" ]; then
+    echo "Enter Domain"
+    exit
+fi
+if [ "$ftp_user" == "" ]; then
+    echo "Enter FTP User"
+    exit
+fi
+if [ "$password" == "" ]; then
+    echo "Enter Password"
+    exit
+fi
+yum install nano -y
+cd /usr/local/bin
+wget https://github.com/gnakul2001/web_essentials/raw/master/create_domain
+wget https://github.com/gnakul2001/web_essentials/raw/master/create_ftp
+chmod +x create_domain
+chmod +x create_ftp
+create_domain create $domain $password $domain
+create_ftp $ftp_user $password $base_dir/$domain
+echo "Domain: $domain\n FTP User: $ftp_user\n Password: $password\n Domain Dir: $base_dir/$domain"
