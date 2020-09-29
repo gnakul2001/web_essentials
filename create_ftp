@@ -120,12 +120,6 @@ write_enable=YES" > /etc/vsftpd/user_conf/$USERNAME
 #Create user
 echo $USERNAME | sudo tee –a /etc/vsftpd/user_list
 
-#Update password.db file
-#mypass=$PASSWORD
-#echo $mypass >> /etc/vsftpd/password-nocrypt
-#echo $(openssl passwd -crypt $mypass) >> /etc/vsftpd/password
-#db_load -T -t hash -f $FTPCONF/password $FTPCONF/password.db
-
 # Create ftp virtual user $HOMEDIR
 if [ ! -d $HOMEDIR  ];then
     mkdir $HOMEDIR
@@ -136,8 +130,8 @@ fi
 chmod 600 $FTPCONF/password.db
 #chmod 750 $HOMEDIR
 
-useradd -d $HOMEDIR -s /sbin/nologin $USERNAME
-echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
+useradd -d $HOMEDIR $USERNAME
+echo $PASSWORD | passwd $USERNAME --stdin
 
 #chown -R $USERNAME:$USERNAME $HOMEDIR
 
