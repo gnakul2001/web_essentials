@@ -134,7 +134,7 @@ fi
 
 # Set Permissions
 chmod 600 $FTPCONF/password.db
-chmod 750 $HOMEDIR
+#chmod 750 $HOMEDIR
 
 useradd -d $HOMEDIR -s /sbin/nologin $USERNAME
 echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
