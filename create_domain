@@ -47,6 +47,9 @@ yum install httpd -y
 mkdir -p $userDir
 mkdir -p $sitesEnable
 mkdir -p $sitesAvailable
+yum install php
+systemctl enable httpd
+systemctl restart httpd
 
 if [ "$action" == 'create' ]
 	then
