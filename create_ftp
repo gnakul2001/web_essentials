@@ -63,7 +63,7 @@ grep -qxF 'pasv_min_port=12000' $FTPCONF/vsftpd.conf || echo 'pasv_min_port=1200
 grep -qxF 'pasv_max_port=12100' $FTPCONF/vsftpd.conf || echo 'pasv_max_port=12100' >> $FTPCONF/vsftpd.conf
 grep -qxF 'port_enable=YES' $FTPCONF/vsftpd.conf || echo 'port_enable=YES' >> $FTPCONF/vsftpd.conf
 grep -qxF 'pasv_addr_resolve=NO' $FTPCONF/vsftpd.conf || echo 'pasv_addr_resolve=NO' >> $FTPCONF/vsftpd.conf
-grep -qxF 'pasv_address=$ip' $FTPCONF/vsftpd.conf || echo 'pasv_address=$ip' >> $FTPCONF/vsftpd.conf
+grep -qxF "pasv_address=$ip" $FTPCONF/vsftpd.conf || echo "pasv_address=$ip" >> $FTPCONF/vsftpd.conf
 grep -qxF 'ssl_enable=YES' $FTPCONF/vsftpd.conf || echo 'ssl_enable=YES' >> $FTPCONF/vsftpd.conf
 grep -qxF 'allow_anon_ssl=NO' $FTPCONF/vsftpd.conf || echo 'allow_anon_ssl=NO' >> $FTPCONF/vsftpd.conf
 grep -qxF 'force_local_data_ssl=NO' $FTPCONF/vsftpd.conf || echo 'force_local_data_ssl=NO' >> $FTPCONF/vsftpd.conf
@@ -73,10 +73,6 @@ grep -qxF 'ssl_sslv2=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv2=NO' >> $FTPCONF
 grep -qxF 'ssl_sslv3=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv3=NO' >> $FTPCONF/vsftpd.conf
 grep -qxF 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
 grep -qxF 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
-grep -qxF 'dirlist_enable=YES' $FTPCONF/vsftpd.conf || echo 'dirlist_enable=YES' >> $FTPCONF/vsftpd.conf
-grep -qxF 'download_enable=YES' $FTPCONF/vsftpd.conf || echo 'download_enable=YES' >> $FTPCONF/vsftpd.conf
-grep -qxF 'local_root=/var/www/$USER' $FTPCONF/vsftpd.conf || echo 'local_root=/var/www/$USER' >> $FTPCONF/vsftpd.conf
-grep -qxF 'write_enable=YES' $FTPCONF/vsftpd.conf || echo 'write_enable=YES' >> $FTPCONF/vsftpd.conf
 
 
 #------------------------------------------------------------------------------------
@@ -117,15 +113,6 @@ echo "dirlist_enable=YES
 download_enable=YES
 local_root=/var/www/$USER
 write_enable=YES" > /etc/vsftpd/user_conf/$USERNAME
-
-#
-# Update denied_users file
-#
-if [ "$USERSTATUS" == "y" ];then
-    echo $USERNAME >> $FTPCONF/denied_users
-else
-    sed -i -r -e "/^$USERNAME$/ d" $FTPCONF/denied_users
-fi
 
 #Create user
 echo $USERNAME | tee /etc/vsftpd/password{,-nocrypt} > /dev/null
