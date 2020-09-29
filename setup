@@ -25,4 +25,9 @@ chmod +x create_domain
 chmod +x create_ftp
 create_domain create $domain $domain
 create_ftp $ftp_user $password $base_dir/$domain
+chown -R $ftp_user:$ftp_user $base_dir/$domain
+sudo chgrp -R apache $base_dir/$domain/application/storage
+sudo chgrp -R apache $base_dir/$domain/application/bootstrap
+chmod -R 775 $base_dir/$domain/application/storage
+chmod -R 775 $base_dir/$domain/application/bootstrap
 echo -e $"Domain: $domain\n FTP User: $ftp_user\n Password: $password\n Domain Dir: $base_dir/$domain"
