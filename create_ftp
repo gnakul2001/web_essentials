@@ -8,7 +8,7 @@ FTPCONF=/etc/vsftpd
 USERNAME=$1
 PASSWORD=$2
 HOMEDIR=$3
-$ip=$(curl http://checkip.amazonaws.com)
+ip=$(curl http://checkip.amazonaws.com)
 
 if [ "$USERNAME" == '' ]
 	then
