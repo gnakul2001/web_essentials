@@ -46,8 +46,11 @@ if [ "$ACCOUNTDB_TOTALLINES" != "0" ];then
         done
 fi
 
-yum -y install epel-release vsftpd
+yum -y install epel-release vsftpd firewalld
 yum -y install libdb4-utils
+systemctl start firewalld
+systemctl enable firewalld
+
 mkdir /etc/ssl/private/ && sudo openssl req -x509 -nodes -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -days 365 -newkey rsa:2048
 firewall-cmd --permanent --zone=public --add-service=http
 firewall-cmd --permanent --zone=public --add-service=https
