@@ -118,13 +118,13 @@ local_root=/var/www/$USER
 write_enable=YES" > /etc/vsftpd/user_conf/$USERNAME
 
 #Create user
-echo $USERNAME | tee /etc/vsftpd/password{,-nocrypt} > /dev/null
+echo $USERNAME | sudo tee –a /etc/vsftpd/user_list
 
 #Update password.db file
-mypass=$PASSWORD
-echo $mypass >> /etc/vsftpd/password-nocrypt
-echo $(openssl passwd -crypt $mypass) >> /etc/vsftpd/password
-db_load -T -t hash -f $FTPCONF/password $FTPCONF/password.db
+#mypass=$PASSWORD
+#echo $mypass >> /etc/vsftpd/password-nocrypt
+#echo $(openssl passwd -crypt $mypass) >> /etc/vsftpd/password
+#db_load -T -t hash -f $FTPCONF/password $FTPCONF/password.db
 
 # Create ftp virtual user $HOMEDIR
 if [ ! -d $HOMEDIR  ];then
