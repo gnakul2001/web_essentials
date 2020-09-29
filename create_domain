@@ -45,6 +45,7 @@ rootDir=$userDir$rootDir
 
 yum install httpd php -y
 mkdir -p $userDir
+mkdir -p $rootDir
 mkdir -p $sitesEnable
 mkdir -p $sitesAvailable
 systemctl enable httpd
