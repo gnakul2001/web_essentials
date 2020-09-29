@@ -76,7 +76,9 @@ grep -qxF 'ssl_sslv2=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv2=NO' >> $FTPCONF
 grep -qxF 'ssl_sslv3=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv3=NO' >> $FTPCONF/vsftpd.conf
 grep -qxF 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
 grep -qxF 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
-
+grep -qxF 'userlist_enable=YES' $FTPCONF/vsftpd.conf || echo 'userlist_enable=YES' >> $FTPCONF/vsftpd.conf
+grep -qxF 'userlist_file=/etc/vsftpd/user_list' $FTPCONF/vsftpd.conf || echo 'userlist_file=/etc/vsftpd/user_list' >> $FTPCONF/vsftpd.conf
+grep -qxF 'userlist_deny=NO' $FTPCONF/vsftpd.conf || echo 'userlist_deny=NO' >> $FTPCONF/vsftpd.conf
 
 #------------------------------------------------------------------------------------
 # Add some presentation :)
