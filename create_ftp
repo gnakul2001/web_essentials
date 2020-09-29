@@ -5,17 +5,17 @@
 #------------------------------------------------------------------------------------
 SHELL=/sbin/nologin
 FTPCONF=/etc/vsftpd
-username=$1
-password=$2
+USERNAME=$1
+PASSWORD=$2
 HOMEDIR=$3
 
-if [ "$username" == '' ]
+if [ "$USERNAME" == '' ]
 	then
 		echo $"Enter Username"
 		exit 1;
 fi
 
-if [ "$password" == '' ]
+if [ "$PASSWORD" == '' ]
 	then
 		echo $"Enter password"
 		exit 1;
