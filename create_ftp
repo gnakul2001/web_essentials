@@ -73,7 +73,10 @@ grep -qxF 'ssl_sslv2=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv2=NO' >> $FTPCONF
 grep -qxF 'ssl_sslv3=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv3=NO' >> $FTPCONF/vsftpd.conf
 grep -qxF 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
 grep -qxF 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
-
+grep -qxF 'dirlist_enable=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'dirlist_enable=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
+grep -qxF 'download_enable=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'download_enable=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
+grep -qxF 'local_root=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'local_root=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
+grep -qxF 'write_enable=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'write_enable=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
 
 
 #------------------------------------------------------------------------------------
