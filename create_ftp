@@ -74,10 +74,7 @@ grep -qxF 'ssl_sslv3=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv3=NO' >> $FTPCONF
 grep -qxF 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
 grep -qxF 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
 
-echo "dirlist_enable=YES
-download_enable=YES
-local_root=/var/www/$USER
-write_enable=YES" > $FTPCONF/vsftpd.conf
+
 
 #------------------------------------------------------------------------------------
 # Add some presentation :)
