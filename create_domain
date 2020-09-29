@@ -43,11 +43,10 @@ fi
 
 rootDir=$userDir$rootDir
 
-yum install httpd -y
+yum install httpd php -y
 mkdir -p $userDir
 mkdir -p $sitesEnable
 mkdir -p $sitesAvailable
-yum install php
 systemctl enable httpd
 systemctl restart httpd
 
