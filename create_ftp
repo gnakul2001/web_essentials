@@ -139,7 +139,7 @@ chmod 750 $HOMEDIR
 useradd -d $HOMEDIR -s /sbin/nologin $USERNAME
 echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
 
-chown -R $USERNAME:$USERNAME $HOMEDIR
+#chown -R $USERNAME:$USERNAME $HOMEDIR
 
 
 # Restart vsftpd after user addition.
