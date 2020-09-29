@@ -73,7 +73,7 @@ if [ "$PACKISMISSING" != "" ];then
     exit;
 fi
 
-echo " Home directory location         : ${HOMEDIR}/$USERNAME "
+echo " Home directory location         : ${HOMEDIR} "
 
 mkdir -p /etc/vsftpd/user_conf/
 touch /etc/vsftpd/user_conf/$USERNAME
@@ -113,7 +113,7 @@ fi
 chmod 600 $FTPCONF/password.db
 chmod 750 $HOMEDIR
 
-useradd -d $HOMEDIR/$USERNAME -s /sbin/nologin $USERNAME
+useradd -d $HOMEDIR -s /sbin/nologin $USERNAME
 echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
 
 chown -R $USERNAME:$USERNAME $HOMEDIR
