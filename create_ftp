@@ -137,8 +137,10 @@ echo $PASSWORD | passwd $USERNAME --stdin
 
 
 chown -R $USERNAME:$USERNAME $HOMEDIR
-sudo chgrp -R apache $HOMEDIR/application/storage $HOMEDIR/application/bootstrap/cache
+sudo chgrp -R apache $HOMEDIR/application/storage
+sudo chgrp -R apache $HOMEDIR/application/bootstrap/
 chmod -R 775 $HOMEDIR/application/storage
+chmod -R 775 $HOMEDIR/application/bootstrap
 
 
 
