@@ -5,7 +5,27 @@
 #------------------------------------------------------------------------------------
 SHELL=/sbin/nologin
 FTPCONF=/etc/vsftpd
-HOMEDIR=/var/www
+username=$1
+password=$2
+HOMEDIR=$3
+
+if [ "$username" == '' ]
+	then
+		echo $"Enter Username"
+		exit 1;
+fi
+
+if [ "$password" == '' ]
+	then
+		echo $"Enter password"
+		exit 1;
+fi
+
+if [ "$HOMEDIR" == '' ]
+	then
+		echo $"Enter Path"
+		exit 1;
+fi
 
 
 if [ -f $FTPCONF/password ];then
@@ -14,72 +34,16 @@ else
     ACCOUNTDB_TOTALLINES=0
 fi
 
-function checkNewUser_Existence () {
-    C=1;
-
-    if [ "$ACCOUNTDB_TOTALLINES" != "0" ];then
+if [ "$ACCOUNTDB_TOTALLINES" != "0" ];then
         while [ $C -lt $ACCOUNTDB_TOTALLINES ]; do
             VALIDUSER=`sed -n -e "$C p" $FTPCONF/password`
             if [ "$USERNAME" == "$VALIDUSER" ];then
-                USERNAMEOK=NO
-                echo 'existence'
-                break;
-            else
-                USERNAMEOK=YES
+                echo 'User Already Exists.'
+                exit;
            fi
            let C=$C+2;
         done
     fi
-}
-
-function checkNewUser_Availability () {
-
-    if [ -f $FTPCONF/denied_users ];then
-        if [ ! `grep -w $USERNAME $FTPCONF/denied_users` ];then
-            USERNAMEOK=YES
-        else
-            USERNAMEOK=NO
-            echo 'avai'
-        fi
-    else
-        mkdir -p $FTPCONF
-        touch $FTPCONF/denied_users
-        checkNewUser_Availability
-    fi
-}
-
-function checkNewUser_Homedir () {
-
-    # Verify User's Home Directory.
-    if [ -d $HOMEDIR ];then
-        for i in `ls $HOMEDIR/`; do
-           VALIDUSER=$i
-           if [ "$USERNAME" == "$VALIDUSER" ];then
-               USERNAMEOK=NO
-               echo 'home'
-           break;
-       else
-           USENAMEOK=YES
-           fi
-        done
-    fi
-}
-
-function getUsername () {
-
-    printf " Enter Username (lowercase)      : "
-    read USERNAME
-
-    checkNewUser_Existence;
-    checkNewUser_Availability;
-    checkNewUser_Homedir;
-
-    if [ "$USERNAMEOK" == "NO" ];then
-        echo "  --> Invalid ftp virtual user. Try another username."
-        getUsername;
-    fi
-
-}
 
 #------------------------------------------------------------------------------------
 # Add some presentation :)
@@ -109,20 +73,7 @@ if [ "$PACKISMISSING" != "" ];then
     exit;
 fi
 
-
-#
-# Get user information
-#
-getUsername;
-printf " Enter Password (case sensitive) : "
-read PASSWORD
-printf " Enter Comment(user's full name) : "
-read FULLNAME
-printf " Account disabled ? (y/N)        : "
-read USERSTATUS
 echo " Home directory location         : ${HOMEDIR}/$USERNAME "
-echo " Home directory permissions      : $USERNAME.$USERNAME | 750 | public_content_rw_t"
-echo " Login Shell                     : $SHELL "
 
 mkdir -p /etc/vsftpd/user_conf/
 touch /etc/vsftpd/user_conf/$USERNAME
@@ -158,17 +109,14 @@ if [ ! -d $HOMEDIR  ];then
 fi
 
 
-# Create home directory
-mkdir -p $HOMEDIR/$USERNAME
-
 # Set Permissions
 chmod 600 $FTPCONF/password.db
-chmod 750 $HOMEDIR/$USERNAME
+chmod 750 $HOMEDIR
 
 useradd -d $HOMEDIR/$USERNAME -s /sbin/nologin $USERNAME
 echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
 
-chown -R $USERNAME:$USERNAME $HOMEDIR/$USERNAME
+chown -R $USERNAME:$USERNAME $HOMEDIR
 
 
 # Restart vsftpd after user addition.
