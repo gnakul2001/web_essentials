@@ -8,6 +8,7 @@ FTPCONF=/etc/vsftpd
 USERNAME=$1
 PASSWORD=$2
 HOMEDIR=$3
+$ip=$(curl http://checkip.amazonaws.com)
 
 if [ "$USERNAME" == '' ]
 	then
@@ -43,17 +44,49 @@ if [ "$ACCOUNTDB_TOTALLINES" != "0" ];then
            fi
            let C=$C+2;
         done
-    fi
+fi
+
+yum -y install epel-release vsftpd
+yum -y libdb4-utils
+mkdir /etc/ssl/private/ && sudo openssl req -x509 -nodes -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem -days 365 -newkey rsa:2048
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --zone=public --add-service=https
+firewall-cmd --permanent --zone=public --add-service=ftp
+firewall-cmd --permanent --add-port=12000-12100/tcp
+firewall-cmd --reload
+
+grep -qxF 'anonymous_enable=NO' $FTPCONF/vsftpd.conf || echo 'anonymous_enable=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'listen_ipv6=NO' $FTPCONF/vsftpd.conf || echo 'listen_ipv6=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'listen=YES' $FTPCONF/vsftpd.conf || echo 'listen=YES' >> $FTPCONF/vsftpd.conf
+grep -qxF 'pasv_enable=YES' $FTPCONF/vsftpd.conf || echo 'pasv_enable=YES' >> $FTPCONF/vsftpd.conf
+grep -qxF 'pasv_min_port=12000' $FTPCONF/vsftpd.conf || echo 'pasv_min_port=12000' >> $FTPCONF/vsftpd.conf
+grep -qxF 'pasv_max_port=12100' $FTPCONF/vsftpd.conf || echo 'pasv_max_port=12100' >> $FTPCONF/vsftpd.conf
+grep -qxF 'port_enable=YES' $FTPCONF/vsftpd.conf || echo 'port_enable=YES' >> $FTPCONF/vsftpd.conf
+grep -qxF 'pasv_addr_resolve=NO' $FTPCONF/vsftpd.conf || echo 'pasv_addr_resolve=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'pasv_address=$ip' $FTPCONF/vsftpd.conf || echo 'pasv_address=$ip' >> $FTPCONF/vsftpd.conf
+grep -qxF 'ssl_enable=YES' $FTPCONF/vsftpd.conf || echo 'ssl_enable=YES' >> $FTPCONF/vsftpd.conf
+grep -qxF 'allow_anon_ssl=NO' $FTPCONF/vsftpd.conf || echo 'allow_anon_ssl=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'force_local_data_ssl=NO' $FTPCONF/vsftpd.conf || echo 'force_local_data_ssl=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'force_local_logins_ssl=NO' $FTPCONF/vsftpd.conf || echo 'force_local_logins_ssl=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'ssl_tlsv1=YES' $FTPCONF/vsftpd.conf || echo 'ssl_tlsv1=YES' >> $FTPCONF/vsftpd.conf
+grep -qxF 'ssl_sslv2=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv2=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'ssl_sslv3=NO' $FTPCONF/vsftpd.conf || echo 'ssl_sslv3=NO' >> $FTPCONF/vsftpd.conf
+grep -qxF 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_cert_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
+grep -qxF 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' $FTPCONF/vsftpd.conf || echo 'rsa_private_key_file=/etc/ssl/private/vsftpd.pem' >> $FTPCONF/vsftpd.conf
+
+echo "dirlist_enable=YES
+download_enable=YES
+local_root=/var/www/$USER
+write_enable=YES" > $FTPCONF/vsftpd.conf
 
 #------------------------------------------------------------------------------------
 # Add some presentation :)
 #------------------------------------------------------------------------------------
-clear;
+
 echo '-------------------------------------------------------------------'
 echo " vsftpd -> Virtual Users -> Add Virtual User"
 echo '-------------------------------------------------------------------'
 
-yum -y install epel-release libdb4-utils vsftpd
 
 # Check dependencies
 PACKISMISSING=""
