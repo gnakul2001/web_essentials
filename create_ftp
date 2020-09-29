@@ -120,7 +120,7 @@ local_root=/var/www/$USER
 write_enable=YES" > /etc/vsftpd/user_conf/$USERNAME
 
 #Create user
-echo $USERNAME | sudo tee –a /etc/vsftpd/user_list
+grep -qxF "$USERNAME" $FTPCONF/user_list || echo "$USERNAME" >> $FTPCONF/user_list
 
 # Create ftp virtual user $HOMEDIR
 if [ ! -d $HOMEDIR  ];then
