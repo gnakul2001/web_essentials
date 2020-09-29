@@ -1,3 +1,4 @@
 yum remove vsftpd httpd -y
 rm -rf /etc/httpd /etc/vsftpd /var/www/websites/dashboard.telepaygate.com
 create_domain delete dashboard.telepaygate.com
+userdel telepaygate_dashboard
