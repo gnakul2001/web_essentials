@@ -22,6 +22,6 @@ wget https://github.com/gnakul2001/web_essentials/raw/master/create_domain
 wget https://github.com/gnakul2001/web_essentials/raw/master/create_ftp
 chmod +x create_domain
 chmod +x create_ftp
-create_domain create $domain $password $domain
+create_domain create $domain $domain
 create_ftp $ftp_user $password $base_dir/$domain
 echo -e $"Domain: $domain\n FTP User: $ftp_user\n Password: $password\n Domain Dir: $base_dir/$domain"
