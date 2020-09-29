@@ -3,7 +3,7 @@
 domain=$1
 ftp_user=$2
 password=$3
-base_dir=$4
+base_dir=/var/www/websites
 if [ "$domain" == "" ]; then
     echo "Enter Domain"
     exit
