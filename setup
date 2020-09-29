@@ -18,6 +18,7 @@ if [ "$password" == "" ]; then
 fi
 yum install nano -y
 cd /usr/local/bin
+rm -rf create_domain create_ftp
 wget https://github.com/gnakul2001/web_essentials/raw/master/create_domain
 wget https://github.com/gnakul2001/web_essentials/raw/master/create_ftp
 chmod +x create_domain
