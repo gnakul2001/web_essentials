@@ -135,7 +135,11 @@ chmod 600 $FTPCONF/password.db
 useradd -d $HOMEDIR $USERNAME
 echo $PASSWORD | passwd $USERNAME --stdin
 
-#chown -R $USERNAME:$USERNAME $HOMEDIR
+
+chown -R $USERNAME:$USERNAME $HOMEDIR
+sudo chgrp -R apache $HOMEDIR/application/storage $HOMEDIR/application/bootstrap/cache
+chmod -R 775 $HOMEDIR/application/storage
+
 
 
 # Restart vsftpd after user addition.
