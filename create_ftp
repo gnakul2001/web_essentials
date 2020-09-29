@@ -165,7 +165,7 @@ mkdir -p $HOMEDIR/$USERNAME
 chmod 600 $FTPCONF/password.db
 chmod 750 $HOMEDIR/$USERNAME
 
-useradd -d $local_root -s /sbin/nologin $USERNAME
+useradd -d $HOMEDIR/$USERNAME -s /sbin/nologin $USERNAME
 echo "$USERNAME:$PASSWORD" | /usr/sbin/chpasswd
 
 chown -R $USERNAME:$USERNAME $HOMEDIR/$USERNAME
