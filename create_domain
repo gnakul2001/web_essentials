@@ -43,7 +43,7 @@ fi
 
 rootDir=$userDir$rootDir
 
-yum install httpd php ufw -y
+yum install epel-release httpd php ufw -y
 mkdir -p $userDir
 mkdir -p $rootDir
 mkdir -p $sitesEnable
