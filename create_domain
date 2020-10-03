@@ -43,12 +43,15 @@ fi
 
 rootDir=$userDir$rootDir
 
-yum install httpd php -y
+yum install httpd php ufw -y
 mkdir -p $userDir
 mkdir -p $rootDir
 mkdir -p $sitesEnable
 mkdir -p $sitesAvailable
 systemctl enable httpd
+sudo ufw enable
+sudo ufw allow 443
+sudo ufw reload
 systemctl restart httpd
 
 if [ "$action" == 'create' ]
